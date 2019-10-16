@@ -1,53 +1,37 @@
 class CitiesController < ApplicationController
-	def cityview 
-		<% @cities.each do |c| %>
-		<% if not @c.nil? %>
-			<h1> <%= @c[:name] %></h1>
-			<p> 
-				The population is <%= @c[:population] %>
-				and its landmark is <%= @c[:landmark] %>
-				and the temperature is <% @c[:temperature] %> degrees
-				Farenheit
-			</p>
-		<% end %>
-		else 
-			<p> Try to create a city! </p>
-		end
-		<% end %>
+	def view 
+		@city = params[:city]
 	end
 
 	def citynew 
-		<%= form_with local: true, method: "get" do |form| %>
-			City:<br>
-			<%= form.text_field :city %> <br>
-			Population: <br>
-			<%= form.text_field :population %>
-			Most Famous Landmark:<br>
-			<%= form.text_field :landmark %>
-			<br>
-			<%= form.submit "Submit" %>
-		<% end %>
+		if params[:name] 
+			if params[:landmark]
+				if params[:population]
+ 					citycreate(params)
+				end
+			end
+		end
 	end
 
-	def citycreate 
-		cit = City.new(citynew)
+	def citycreate(params)
+		cit = City.new(name: params[:name], landmark: params[:landmark], population: params[:population])
 		cit.save
+		redirect_to "/cities/view"
 	end
 
-	def cityupdate([:params])
-		 <%= form_with local: true, method: "get" do |form| %>
-                        City:<br>
-                        <%= form.text_field params[:city] %> <br>
-                        Population: <br>
-                        <%= form.text_field :population %>
-                        Most Famous Landmark:<br>
-                        <%= form.text_field :landmark %>
-                        <br>
-                        <%= form.submit "Submit" %>
-                <% end %> 
+	def cityupdateget
+		if params[:name]
+			if (params[:landmark] or params[:population])
+				cityupdatepost(params)
+			end
+		end
 	end
 
-	def cityupdatetoview
+	def cityupdatepost(params)
+		if City.all[params[:name].to_sym]
+			City.all[params[:name].to_sym].update(landmark: params[:landmark], population: params[:population]
+		end
+		redirect_to "/cities/view"
 	end
 end
 
