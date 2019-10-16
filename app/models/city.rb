@@ -14,8 +14,8 @@ class City
 	end
 
 	def self.all
-    $cities
-  end
+	    $cities
+ 	 end
 
 	def update(update_params)
 		# Your code here, for Task 4

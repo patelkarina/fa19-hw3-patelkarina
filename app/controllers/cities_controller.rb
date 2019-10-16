@@ -14,8 +14,10 @@ class CitiesController < ApplicationController
 	end
 
 	def citycreate(params)
-		cit = City.new(name: params[:name], landmark: params[:landmark], population: params[:population])
-		cit.save
+		if not City.all.key?(params[:name].to_sym)
+			cit = City.new(name: params[:name], landmark: params[:landmark], population: params[:population])
+			cit.save
+		end
 		redirect_to "/cities/view"
 	end
 
